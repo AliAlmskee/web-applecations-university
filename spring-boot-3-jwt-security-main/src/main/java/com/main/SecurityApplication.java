@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @EnableCaching
 public class SecurityApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(SecurityApplication.class, args);
 	}
-
 }

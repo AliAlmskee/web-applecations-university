@@ -1,0 +1,72 @@
+package com.main.controller;
+
+import com.main.entity.Complaint;
+import com.main.entity.ComplaintStatus;
+import com.main.entity.ComplaintType;
+import com.main.dto.ComplaintRequest;
+import com.main.services.ComplaintService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/complaints")
+@RequiredArgsConstructor
+public class ComplaintController {
+
+    private final ComplaintService service;
+
+    @PostMapping
+    public ResponseEntity<?> save(@RequestBody ComplaintRequest request) {
+        Complaint complaint = service.save(request);
+        return ResponseEntity.accepted().body(complaint);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Complaint>> findAllComplaints() {
+        return ResponseEntity.ok(service.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Complaint> findComplaintById(@PathVariable int id) {
+        return ResponseEntity.ok(service.findById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateComplaint(
+            @PathVariable int id,
+            @RequestBody ComplaintRequest request
+    ) {
+        Complaint complaint = service.update(id, request);
+        return ResponseEntity.ok(complaint);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComplaint(@PathVariable int id) {
+        service.delete(id);
+        return ResponseEntity.ok("Complaint deleted successfully");
+    }
+
+    @GetMapping("/complainant/{complainantId}")
+    public ResponseEntity<List<Complaint>> findByComplainantId(@PathVariable Integer complainantId) {
+        return ResponseEntity.ok(service.findByComplainantId(complainantId));
+    }
+
+    @GetMapping("/complained-about")
+    public ResponseEntity<List<Complaint>> findByComplainedAbout(@RequestParam String complainedAbout) {
+        return ResponseEntity.ok(service.findByComplainedAbout(complainedAbout));
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Complaint>> findByStatus(@PathVariable ComplaintStatus status) {
+        return ResponseEntity.ok(service.findByStatus(status));
+    }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<Complaint>> findByType(@PathVariable ComplaintType type) {
+        return ResponseEntity.ok(service.findByType(type));
+    }
+}
+

@@ -29,4 +29,25 @@ public class BookService {
     public List<Book> findAll() {
         return repository.findAll();
     }
+
+    public Book findById(int id) {
+        return repository.findByIdWithLock(id)
+                .orElseThrow(() -> new RuntimeException("Book not found with ID: " + id));
+    }
+
+    @CacheEvict(value = "books", allEntries = true)
+    public Book update(int id, BookRequest request) {
+        Book existing = findById(id);
+
+        existing.setAuthor(request.getAuthor());
+        existing.setIsbn(request.getIsbn());
+
+        return repository.save(existing);
+    }
+
+    @CacheEvict(value = "books", allEntries = true)
+    public void delete(int id) {
+        Book existing = findById(id);
+        repository.delete(existing);
+    }
 }
