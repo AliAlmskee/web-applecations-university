@@ -1,5 +1,7 @@
 package com.main.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.core.Setup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +14,10 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+
 import org.hibernate.envers.Audited;
 
 @Data
@@ -21,7 +26,6 @@ import org.hibernate.envers.Audited;
 @AllArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@Audited
 public abstract class BaseEntity {
 
     @Id
@@ -46,7 +50,7 @@ public abstract class BaseEntity {
 
     @CreatedBy
     @Column(
-            nullable = false,
+            nullable = true,
             updatable = false
     )
     private Integer createdBy;
@@ -54,5 +58,21 @@ public abstract class BaseEntity {
     @LastModifiedBy
     @Column(insertable = false)
     private Integer lastModifiedBy;
+
+
+    @JsonIgnore
+    public String getLabel() {
+        Field labelField = Setup.getLabelField(this.getClass());
+        if (labelField != null) {
+            labelField.setAccessible(true);
+            try {
+                return (String) labelField.get(this);
+            } catch (IllegalArgumentException
+                     | IllegalAccessException ex) {
+                    //
+            }
+        }
+        return getId() + "";
+    }
 }
 

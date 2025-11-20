@@ -1,5 +1,8 @@
 package com.main.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.core.annotation.Label;
+import com.main.core.entity.BaseEntity;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -8,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,13 +20,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Audited
 @Table(name = "_user")
-public class User implements UserDetails {
+public class User  extends BaseEntity implements UserDetails {
 
-  @Id
-  @GeneratedValue
-  private Integer id;
-
+  @Label
   private String firstname;
   private String lastname;
 
@@ -36,6 +38,7 @@ public class User implements UserDetails {
   private Role role;
 
   @OneToMany(mappedBy = "user")
+  @JsonIgnore
   private List<Token> tokens;
 
   @Override

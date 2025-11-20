@@ -10,6 +10,7 @@ import com.main.dto.ComplaintRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +22,16 @@ public class ComplaintService {
 
     private final ComplaintRepository complaintRepository;
     private final UserRepository userRepository;
+    private final AuditorAware<Integer> auditorAware;
 
     @CacheEvict(value = "complaints", allEntries = true)
     @Transactional
     public Complaint save(ComplaintRequest request) {
-        User complainant = userRepository.findById(request.getComplainantId())
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + request.getComplainantId()));
+        Integer currentAuditorId = auditorAware.getCurrentAuditor()
+                .orElseThrow(() -> new RuntimeException("No authenticated user found"));
+        
+        User complainant = userRepository.findById(currentAuditorId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + currentAuditorId));
 
         Complaint complaint = Complaint.builder()
                 .status(request.getStatus() != null ? request.getStatus() : ComplaintStatus.PENDING)
@@ -74,11 +79,6 @@ public class ComplaintService {
         }
         if (request.getComplainedAbout() != null) {
             existing.setComplainedAbout(request.getComplainedAbout());
-        }
-        if (request.getComplainantId() != null) {
-            User complainant = userRepository.findById(request.getComplainantId())
-                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + request.getComplainantId()));
-            existing.setComplainant(complainant);
         }
 
         return complaintRepository.save(existing);

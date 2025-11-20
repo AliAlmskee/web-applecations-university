@@ -18,6 +18,5 @@ public class ComplaintRequest {
     private String location;
     private String description;
     private String complainedAbout;
-    private Integer complainantId;
 }
 

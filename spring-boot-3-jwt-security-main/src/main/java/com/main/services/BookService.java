@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,12 +31,14 @@ public class BookService {
         return repository.findAll();
     }
 
+    @Transactional
     public Book findById(int id) {
         return repository.findByIdWithLock(id)
                 .orElseThrow(() -> new RuntimeException("Book not found with ID: " + id));
     }
 
     @CacheEvict(value = "books", allEntries = true)
+    @Transactional
     public Book update(int id, BookRequest request) {
         Book existing = findById(id);
 

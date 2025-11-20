@@ -1,11 +1,14 @@
 package com.main.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.main.core.entity.BaseEntity;
+import com.main.core.serializer.IdLabelSerializer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "complaints")
+@Table
+@Audited
 public class Complaint extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
@@ -42,6 +46,7 @@ public class Complaint extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "complainant_user_id", nullable = false)
+    @JsonSerialize(using = IdLabelSerializer.class)
     private User complainant;
 }
 
