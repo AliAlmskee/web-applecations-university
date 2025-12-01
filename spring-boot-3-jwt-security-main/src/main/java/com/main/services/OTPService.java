@@ -2,18 +2,20 @@ package com.main.services;
 
 import com.main.entity.User;
 import com.main.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
 @Service
-@RequiredArgsConstructor
 public class OTPService {
 
     private static final long OTP_EXPIRY_TIME = 5 * 60 * 1000;
     private static final Random random = new Random();
     private final UserRepository userRepository;
+
+    public OTPService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public int generateOTP() {
         return 100000 + random.nextInt(900000);

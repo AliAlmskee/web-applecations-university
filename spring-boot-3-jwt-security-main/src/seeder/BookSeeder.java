@@ -2,16 +2,18 @@ package com.main.seeder;
 
 import com.main.entity.Book;
 import com.main.repository.BookRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 public class BookSeeder {
     private final BookRepository bookRepository;
+
+    public BookSeeder(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     public void seed() {
         if (bookRepository.count() == 0) {

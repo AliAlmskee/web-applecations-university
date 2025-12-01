@@ -22,19 +22,19 @@ public class ComplaintService {
 
     private final ComplaintRepository complaintRepository;
     private final UserRepository userRepository;
-    private final AuditorAware<Integer> auditorAware;
+    private final AuditorAware<Long> auditorAware;
 
     @CacheEvict(value = "complaints", allEntries = true)
     @Transactional
     public Complaint save(ComplaintRequest request) {
-        Integer currentAuditorId = auditorAware.getCurrentAuditor()
+        Long currentAuditorId = auditorAware.getCurrentAuditor()
                 .orElseThrow(() -> new RuntimeException("No authenticated user found"));
         
         User complainant = userRepository.findById(currentAuditorId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + currentAuditorId));
 
         Complaint complaint = Complaint.builder()
-                .status(request.getStatus() != null ? request.getStatus() : ComplaintStatus.PENDING)
+                .status(ComplaintStatus.PENDING)
                 .files(request.getFiles() != null ? request.getFiles() : List.of())
                 .type(request.getType())
                 .location(request.getLocation())

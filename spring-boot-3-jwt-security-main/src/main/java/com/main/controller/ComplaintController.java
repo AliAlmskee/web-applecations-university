@@ -5,7 +5,6 @@ import com.main.entity.ComplaintStatus;
 import com.main.entity.ComplaintType;
 import com.main.dto.ComplaintRequest;
 import com.main.services.ComplaintService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/complaints")
-@RequiredArgsConstructor
 public class ComplaintController {
 
     private final ComplaintService service;
+
+    public ComplaintController(ComplaintService service) {
+        this.service = service;
+    }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody ComplaintRequest request) {

@@ -3,10 +3,6 @@ package com.main.core.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main.core.Setup;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,21 +12,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.logging.Level;
 
-import org.hibernate.envers.Audited;
-
-@Data
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
+public abstract class BaseEntity extends BaseEntityParent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
 
     @Version
     @ColumnDefault("0")
@@ -53,12 +42,14 @@ public abstract class BaseEntity {
             nullable = true,
             updatable = false
     )
-    private Integer createdBy;
+    private Long createdBy;
 
     @LastModifiedBy
     @Column(insertable = false)
-    private Integer lastModifiedBy;
+    private Long lastModifiedBy;
 
+    public BaseEntity() {
+    }
 
     @JsonIgnore
     public String getLabel() {
@@ -73,6 +64,55 @@ public abstract class BaseEntity {
             }
         }
         return getId() + "";
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDateTime getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(LocalDateTime lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 }
 

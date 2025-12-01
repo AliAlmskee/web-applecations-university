@@ -4,7 +4,6 @@ import com.main.aspect.NoLogging;
 import com.main.entity.Book;
 import com.main.dto.BookRequest;
 import com.main.services.BookService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/books")
-@RequiredArgsConstructor
 public class BookController {
 
     private final BookService service;
+
+    public BookController(BookService service) {
+        this.service = service;
+    }
 
     @PostMapping
     public ResponseEntity<?> save(

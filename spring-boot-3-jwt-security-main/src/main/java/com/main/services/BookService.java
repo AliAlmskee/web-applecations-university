@@ -3,7 +3,6 @@ package com.main.services;
 import com.main.entity.Book;
 import com.main.repository.BookRepository;
 import com.main.dto.BookRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -12,10 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository repository;
+
+    public BookService(BookRepository repository) {
+        this.repository = repository;
+    }
 
     @CacheEvict(value = "books", allEntries = true)
     public Book save(BookRequest request) {

@@ -14,7 +14,6 @@ import com.main.repository.TokenRepository;
 import com.main.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,13 +22,20 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository repository;
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
     private final OTPService otpService;
     private final SMSService smsService;
+
+    public AuthenticationService(UserRepository repository, TokenRepository tokenRepository, JwtService jwtService, OTPService otpService, SMSService smsService) {
+        this.repository = repository;
+        this.tokenRepository = tokenRepository;
+        this.jwtService = jwtService;
+        this.otpService = otpService;
+        this.smsService = smsService;
+    }
 
     public void register(RegisterRequest request) {
         if (repository.findByPhone(request.getPhone()).isPresent()) {

@@ -2,7 +2,6 @@ package com.main.config;
 
 import com.main.auditing.ApplicationAuditAware;
 import com.main.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -16,10 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@RequiredArgsConstructor
 public class ApplicationConfig {
 
-  private final UserRepository repository;
+    private final UserRepository repository;
+
+    public ApplicationConfig(UserRepository repository) {
+        this.repository = repository;
+    }
 
   @Bean
   public UserDetailsService userDetailsService() {
@@ -36,7 +38,7 @@ public class ApplicationConfig {
   }
 
   @Bean
-  public AuditorAware<Integer> auditorAware() {
+  public AuditorAware<Long> auditorAware() {
     return new ApplicationAuditAware();
   }
 
