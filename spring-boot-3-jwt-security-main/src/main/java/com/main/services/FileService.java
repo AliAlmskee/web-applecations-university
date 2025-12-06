@@ -1,6 +1,6 @@
 package com.main.services;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,18 +14,20 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-
-@Component
 @Service
 public class FileService {
-    private static final String basePath = "storage/";
+
+    @Value("${file.storage.path:${user.home}/app-storage}")
+    private String basePath;
+
     public String createFile(MultipartFile file, Path path) throws IOException {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         InputStream inputStream = file.getInputStream();
         Path filePath = path.resolve(fileName);
         Path fullPath = Paths.get(basePath, filePath.toString());
-        if (Files.notExists(fullPath)) {
-            Files.createDirectories(fullPath);
+        Path parentDir = fullPath.getParent();
+        if (parentDir != null && Files.notExists(parentDir)) {
+            Files.createDirectories(parentDir);
         }
         Files.copy(inputStream, fullPath, StandardCopyOption.REPLACE_EXISTING);
         return filePath.toString().replace("\\", "/");

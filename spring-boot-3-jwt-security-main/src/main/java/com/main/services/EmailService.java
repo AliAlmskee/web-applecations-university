@@ -35,7 +35,7 @@ public class EmailService {
                 email.setTo(to);
                 email.setSubject(subject);
                 email.setText(message);
-                email.setFrom("tech@sileaders.com"); // غيّرها إلى بريدك
+                email.setFrom("test@gmail.com");
                 mailSender.send(email);
             } catch (MailException e) {
                 logger.error("MailException failed to send email to: " + to, e);
