@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main.core.annotation.Label;
 import com.main.core.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Audited
 @Table(name = "_user")
+@Builder
 public class User extends BaseEntity implements UserDetails {
 
     @Label
@@ -34,62 +36,6 @@ public class User extends BaseEntity implements UserDetails {
     private List<Token> tokens;
 
     public User() {
-    }
-
-    private User(Builder builder) {
-        this.firstname = builder.firstname;
-        this.lastname = builder.lastname;
-        this.phone = builder.phone;
-        this.password = builder.password;
-        this.role = builder.role;
-        this.tokens = builder.tokens;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private String firstname;
-        private String lastname;
-        private String phone;
-        private String password;
-        private Role role;
-        private List<Token> tokens;
-
-        public Builder firstname(String firstname) {
-            this.firstname = firstname;
-            return this;
-        }
-
-        public Builder lastname(String lastname) {
-            this.lastname = lastname;
-            return this;
-        }
-
-        public Builder phone(String phone) {
-            this.phone = phone;
-            return this;
-        }
-
-        public Builder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public Builder role(Role role) {
-            this.role = role;
-            return this;
-        }
-
-        public Builder tokens(List<Token> tokens) {
-            this.tokens = tokens;
-            return this;
-        }
-
-        public User build() {
-            return new User(this);
-        }
     }
 
     public String getFirstname() {

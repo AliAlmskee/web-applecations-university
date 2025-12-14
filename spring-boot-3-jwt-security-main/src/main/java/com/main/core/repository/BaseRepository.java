@@ -9,7 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(exported = false)
 public abstract interface BaseRepository<T extends BaseEntity>
         extends BaseRepositoryParent<T>
-      //  , RevisionRepository<T, Long, Long>
+        , RevisionRepository<T, Long, Long>
 {
 
 }

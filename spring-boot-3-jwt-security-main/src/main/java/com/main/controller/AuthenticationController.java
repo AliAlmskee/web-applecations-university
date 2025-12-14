@@ -4,6 +4,7 @@ import com.main.dto.AuthenticationRequest;
 import com.main.dto.AuthenticationResponse;
 import com.main.dto.RegisterRequest;
 import com.main.dto.RequestOTPRequest;
+import com.main.entity.Role;
 import com.main.services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @Valid @RequestBody RegisterRequest request) {
+        request.setRole(Role.USER);
         service.register(request);
         return ResponseEntity.ok().body(java.util.Map.of("message", "OTP sent successfully to " + request.getPhone()));
     }

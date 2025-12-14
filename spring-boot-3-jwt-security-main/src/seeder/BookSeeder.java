@@ -1,7 +1,5 @@
 package com.main.seeder;
 
-import com.main.entity.Book;
-import com.main.repository.BookRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

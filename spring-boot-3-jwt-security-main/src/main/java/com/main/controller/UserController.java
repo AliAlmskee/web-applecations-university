@@ -1,12 +1,13 @@
 package com.main.controller;
 
 import com.main.dto.ChangePasswordRequest;
+import com.main.dto.RegisterRequest;
+import com.main.entity.Role;
 import com.main.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -28,4 +29,13 @@ public class UserController {
         service.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @Valid @RequestBody RegisterRequest request) {
+        service.register(request);
+        return ResponseEntity.ok().body(java.util.Map.of("message", "OTP sent successfully to " + request.getPhone()));
+    }
+
 }

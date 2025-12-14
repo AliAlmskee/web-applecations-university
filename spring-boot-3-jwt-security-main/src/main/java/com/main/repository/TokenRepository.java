@@ -3,13 +3,13 @@ package com.main.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.main.core.repository.BaseRepository;
 import com.main.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.history.RevisionRepository;
 
-public interface TokenRepository extends JpaRepository<Token, Integer>
-       // , RevisionRepository<Token,Integer,Integer>
+public interface TokenRepository extends BaseRepository<Token>
 {
 
   @Query(value = """

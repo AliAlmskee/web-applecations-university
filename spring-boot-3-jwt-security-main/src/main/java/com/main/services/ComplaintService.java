@@ -52,14 +52,14 @@ public class ComplaintService {
     }
 
     @Transactional
-    public Complaint findById(int id) {
+    public Complaint findById(Long id) {
         return complaintRepository.findByIdWithLock(id)
                 .orElseThrow(() -> new RuntimeException("Complaint not found with ID: " + id));
     }
 
     @CacheEvict(value = "complaints", allEntries = true)
     @Transactional
-    public Complaint update(int id, ComplaintRequest request) {
+    public Complaint update(Long id, ComplaintRequest request) {
         Complaint existing = findById(id);
 
         if (request.getStatus() != null) {
@@ -86,12 +86,12 @@ public class ComplaintService {
 
     @CacheEvict(value = "complaints", allEntries = true)
     @Transactional
-    public void delete(int id) {
+    public void delete(Long id) {
         Complaint existing = findById(id);
         complaintRepository.delete(existing);
     }
 
-    public List<Complaint> findByComplainantId(Integer complainantId) {
+    public List<Complaint> findByComplainantId(Long complainantId) {
         return complaintRepository.findByComplainantId(complainantId);
     }
 
