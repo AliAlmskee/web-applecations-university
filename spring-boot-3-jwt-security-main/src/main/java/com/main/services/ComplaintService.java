@@ -1,9 +1,11 @@
 package com.main.services;
 
 import com.main.entity.Complaint;
+import com.main.entity.ComplaintFile;
 import com.main.entity.ComplaintStatus;
 import com.main.entity.ComplaintType;
 import com.main.entity.User;
+import com.main.repository.ComplaintFileRepository;
 import com.main.repository.ComplaintRepository;
 import com.main.repository.UserRepository;
 import com.main.dto.ComplaintRequest;
@@ -13,7 +15,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -21,7 +26,9 @@ import java.util.List;
 public class ComplaintService {
 
     private final ComplaintRepository complaintRepository;
+    private final ComplaintFileRepository complaintFileRepository;
     private final UserRepository userRepository;
+    private final FileService fileService;
     private final AuditorAware<Long> auditorAware;
 
     @CacheEvict(value = "complaints", allEntries = true)
@@ -35,7 +42,6 @@ public class ComplaintService {
 
         Complaint complaint = Complaint.builder()
                 .status(ComplaintStatus.PENDING)
-                .files(request.getFiles() != null ? request.getFiles() : List.of())
                 .type(request.getType())
                 .location(request.getLocation())
                 .description(request.getDescription())
@@ -64,9 +70,6 @@ public class ComplaintService {
 
         if (request.getStatus() != null) {
             existing.setStatus(request.getStatus());
-        }
-        if (request.getFiles() != null) {
-            existing.setFiles(request.getFiles());
         }
         if (request.getType() != null) {
             existing.setType(request.getType());
@@ -105,6 +108,42 @@ public class ComplaintService {
 
     public List<Complaint> findByType(ComplaintType type) {
         return complaintRepository.findByType(type);
+    }
+
+    @CacheEvict(value = "complaints", allEntries = true)
+    @Transactional
+    public ComplaintFile uploadFile(int complaintId, MultipartFile file) throws Exception {
+        Complaint complaint = findById(complaintId);
+        
+        // Create path for complaint files: complaints/{complaintId}/filename
+        Path filePath = Paths.get("complaints", String.valueOf(complaintId));
+        
+        // Save file using FileService
+        String savedPath = fileService.createFile(file, filePath);
+        
+        // Create ComplaintFile entity
+        ComplaintFile complaintFile = new ComplaintFile(
+                complaint,
+                savedPath,
+                file.getOriginalFilename(),
+                file.getContentType(),
+                file.getSize()
+        );
+        
+        // Save to database
+        return complaintFileRepository.save(complaintFile);
+    }
+
+    @CacheEvict(value = "complaints", allEntries = true)
+    @Transactional
+    public void deleteFile(Long fileId) {
+        ComplaintFile file = complaintFileRepository.findById(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found with ID: " + fileId));
+        complaintFileRepository.delete(file);
+    }
+
+    public List<ComplaintFile> getComplaintFiles(int complaintId) {
+        return complaintFileRepository.findByComplaintId(complaintId);
     }
 }
 

@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity extends BaseEntityParent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Version

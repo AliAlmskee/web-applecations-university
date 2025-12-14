@@ -18,10 +18,8 @@ public class Complaint extends BaseEntity {
     @Column(nullable = false)
     private ComplaintStatus status;
 
-    @ElementCollection
-    @CollectionTable(name = "complaint_files", joinColumns = @JoinColumn(name = "complaint_id"))
-    @Column(name = "file_path")
-    private List<String> files = new ArrayList<>();
+    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ComplaintFile> complaintFiles = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -46,7 +44,7 @@ public class Complaint extends BaseEntity {
 
     private Complaint(Builder builder) {
         this.status = builder.status;
-        this.files = builder.files != null ? builder.files : new ArrayList<>();
+        this.complaintFiles = builder.complaintFiles != null ? builder.complaintFiles : new ArrayList<>();
         this.type = builder.type;
         this.location = builder.location;
         this.description = builder.description;
@@ -60,7 +58,7 @@ public class Complaint extends BaseEntity {
 
     public static class Builder {
         private ComplaintStatus status;
-        private List<String> files;
+        private List<ComplaintFile> complaintFiles;
         private ComplaintType type;
         private String location;
         private String description;
@@ -72,8 +70,8 @@ public class Complaint extends BaseEntity {
             return this;
         }
 
-        public Builder files(List<String> files) {
-            this.files = files;
+        public Builder complaintFiles(List<ComplaintFile> complaintFiles) {
+            this.complaintFiles = complaintFiles;
             return this;
         }
 
@@ -115,12 +113,12 @@ public class Complaint extends BaseEntity {
         this.status = status;
     }
 
-    public List<String> getFiles() {
-        return files;
+    public List<ComplaintFile> getComplaintFiles() {
+        return complaintFiles;
     }
 
-    public void setFiles(List<String> files) {
-        this.files = files;
+    public void setComplaintFiles(List<ComplaintFile> complaintFiles) {
+        this.complaintFiles = complaintFiles;
     }
 
     public ComplaintType getType() {

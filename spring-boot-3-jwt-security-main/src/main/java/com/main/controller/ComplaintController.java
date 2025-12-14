@@ -1,12 +1,14 @@
 package com.main.controller;
 
 import com.main.entity.Complaint;
+import com.main.entity.ComplaintFile;
 import com.main.entity.ComplaintStatus;
 import com.main.entity.ComplaintType;
 import com.main.dto.ComplaintRequest;
 import com.main.services.ComplaintService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -69,6 +71,30 @@ public class ComplaintController {
     @GetMapping("/type/{type}")
     public ResponseEntity<List<Complaint>> findByType(@PathVariable ComplaintType type) {
         return ResponseEntity.ok(service.findByType(type));
+    }
+
+    @PostMapping("/{id}/files")
+    public ResponseEntity<?> uploadFile(
+            @PathVariable int id,
+            @RequestParam("file") MultipartFile file
+    ) {
+        try {
+            ComplaintFile complaintFile = service.uploadFile(id, file);
+            return ResponseEntity.ok(complaintFile);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error uploading file: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/files")
+    public ResponseEntity<List<ComplaintFile>> getComplaintFiles(@PathVariable int id) {
+        return ResponseEntity.ok(service.getComplaintFiles(id));
+    }
+
+    @DeleteMapping("/files/{fileId}")
+    public ResponseEntity<?> deleteFile(@PathVariable Long fileId) {
+        service.deleteFile(fileId);
+        return ResponseEntity.ok("File deleted successfully");
     }
 }
 
