@@ -12,14 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class RegisterRequest {
-
     @NotEmpty
     private String firstname;
-
     private String lastname;
-
     @NotEmpty
     private String phone;
-
+    private String fcmToken;
     private Role role ;
 }

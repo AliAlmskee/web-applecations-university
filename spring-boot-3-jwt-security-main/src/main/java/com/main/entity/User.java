@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main.core.annotation.Label;
 import com.main.core.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +17,7 @@ import java.util.List;
 @Audited
 @Table(name = "_user")
 @Builder
+@AllArgsConstructor
 public class User extends BaseEntity implements UserDetails {
 
     @Label
@@ -34,6 +36,10 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<FCMToken> fcmTokens;
 
     public User() {
     }
@@ -80,6 +86,14 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setTokens(List<Token> tokens) {
         this.tokens = tokens;
+    }
+
+    public List<FCMToken> getFcmTokens() {
+        return fcmTokens;
+    }
+
+    public void setFcmTokens(List<FCMToken> fcmTokens) {
+        this.fcmTokens = fcmTokens;
     }
 
   @Override
