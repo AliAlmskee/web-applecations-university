@@ -12,19 +12,23 @@ public class RegisterRequest {
     @NotEmpty
     private String phone;
 
+    private String fcmToken;
+
     public RegisterRequest() {
     }
 
-    public RegisterRequest(String firstname, String lastname, String phone) {
+    public RegisterRequest(String firstname, String lastname, String phone, String fcmToken) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.phone = phone;
+        this.fcmToken = fcmToken;
     }
 
     private RegisterRequest(Builder builder) {
         this.firstname = builder.firstname;
         this.lastname = builder.lastname;
         this.phone = builder.phone;
+        this.fcmToken = builder.fcmToken;
     }
 
     public static Builder builder() {
@@ -35,6 +39,7 @@ public class RegisterRequest {
         private String firstname;
         private String lastname;
         private String phone;
+        private String fcmToken;
 
         public Builder firstname(String firstname) {
             this.firstname = firstname;
@@ -48,6 +53,11 @@ public class RegisterRequest {
 
         public Builder phone(String phone) {
             this.phone = phone;
+            return this;
+        }
+
+        public Builder fcmToken(String fcmToken) {
+            this.fcmToken = fcmToken;
             return this;
         }
 
@@ -78,5 +88,13 @@ public class RegisterRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

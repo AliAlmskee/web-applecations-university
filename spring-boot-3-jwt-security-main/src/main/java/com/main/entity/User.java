@@ -33,6 +33,10 @@ public class User extends BaseEntity implements UserDetails {
     @JsonIgnore
     private List<Token> tokens;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<FCMToken> fcmTokens;
+
     public User() {
     }
 
@@ -43,6 +47,7 @@ public class User extends BaseEntity implements UserDetails {
         this.password = builder.password;
         this.role = builder.role;
         this.tokens = builder.tokens;
+        this.fcmTokens = builder.fcmTokens;
     }
 
     public static Builder builder() {
@@ -56,6 +61,7 @@ public class User extends BaseEntity implements UserDetails {
         private String password;
         private Role role;
         private List<Token> tokens;
+        private List<FCMToken> fcmTokens;
 
         public Builder firstname(String firstname) {
             this.firstname = firstname;
@@ -84,6 +90,11 @@ public class User extends BaseEntity implements UserDetails {
 
         public Builder tokens(List<Token> tokens) {
             this.tokens = tokens;
+            return this;
+        }
+
+        public Builder fcmTokens(List<FCMToken> fcmTokens) {
+            this.fcmTokens = fcmTokens;
             return this;
         }
 
@@ -134,6 +145,14 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setTokens(List<Token> tokens) {
         this.tokens = tokens;
+    }
+
+    public List<FCMToken> getFcmTokens() {
+        return fcmTokens;
+    }
+
+    public void setFcmTokens(List<FCMToken> fcmTokens) {
+        this.fcmTokens = fcmTokens;
     }
 
   @Override
