@@ -12,9 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Aspect
 @Component
 public class LoggingAspect {
@@ -50,50 +47,4 @@ public class LoggingAspect {
         targetLogger.info("User: {} (ID: {}) | API: {}.{} ",
                 userName, userId, className, methodName);
     }
-
-//    @AfterThrowing(pointcut = "execution(* com.main..*(..)) &&" +
-//            " !@annotation(com.main.aspect.NoLogging) &&" +
-//            " !execution(* com.main.config..*(..)) && " +
-//            " !execution(* com.main.aspect..*(..)) &&" +
-//            " !within(org.springframework.web.filter.OncePerRequestFilter+) &&" +
-//            " !within(jakarta.servlet.Filter+)", throwing = "exception")
-//    public void logException(JoinPoint joinPoint, Throwable exception) {
-//        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-//        Class<?> targetClass = signature.getDeclaringType();
-//        String className = targetClass.getName();
-//        String methodName = signature.getMethod().getName();
-//        Logger targetLogger = LoggerFactory.getLogger(targetClass);
-//        targetLogger.error("{}.{} - Exception occurred: {}", className, methodName, exception.getMessage());
-//    }
-
-//    @Around("execution(* com.main..*(..)) &&" +
-//            " !@annotation(com.main.aspect.NoLogging) &&" +
-//            " !execution(* com.main.config..*(..)) && " +
-//            " !execution(* com.main.aspect..*(..)) &&" +
-//            " !within(org.springframework.web.filter.OncePerRequestFilter+) &&" +
-//            " !within(jakarta.servlet.Filter+)")
-//    public Object logPerformanceMetrics(ProceedingJoinPoint joinPoint) throws Throwable {
-//        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-//        Method method = signature.getMethod();
-//
-//        // Get the actual target class (not the proxy)
-//        Class<?> targetClass = signature.getDeclaringType();
-//
-//        // Use the actual class name (not the proxy)
-//        String className = targetClass.getName();
-//        String methodName = method.getName();
-//
-//        // Use a logger for the actual target class
-//        Logger targetLogger = LoggerFactory.getLogger(targetClass);
-//
-//        long startTime = System.currentTimeMillis();
-//        Object result = joinPoint.proceed();
-//        long endTime = System.currentTimeMillis();
-//        long executionTime = endTime - startTime;
-//
-//        // Log after method execution with execution time
-//        targetLogger.info("{}.{} after {}ms", className, methodName, executionTime);
-//
-//        return result;
-//    }
 }

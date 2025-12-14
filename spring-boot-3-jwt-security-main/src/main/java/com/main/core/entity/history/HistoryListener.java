@@ -16,8 +16,7 @@ public class HistoryListener implements EntityTrackingRevisionListener {
                 && CurrentRequest.isExist()) {
             User user = CurrentRequest.getUser();
             if (user != null) {
-                entity.setCreator(user
-                        .toString());
+                entity.setCreator(user.getId());
             }
         }
     }

@@ -53,7 +53,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .phone(request.getPhone())
                 .password("")
-                .role(Role.USER)
+                .role(request.getRole())
                 .build();
         var savedUser = repository.save(user);
 
@@ -179,4 +179,41 @@ public class AuthenticationService {
             }
         }
     }
+
+    public AuthenticationResponse registerSystemUser(RegisterRequest request) {
+
+        if (repository.findByPhone(request.getPhone()).isPresent()) {
+            var user = repository.findByPhone(request.getPhone()).get();
+
+            var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+
+            return AuthenticationResponse.builder()
+                    .accessToken(jwtToken)
+                    .refreshToken(refreshToken)
+                    .build();
+        }
+
+        var user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .phone(request.getPhone())
+                .password("")
+                .role(request.getRole())
+                .build();
+
+        repository.save(user);
+
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
+        saveUserToken(user, jwtToken);
+
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+
 }

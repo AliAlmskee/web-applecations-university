@@ -15,13 +15,13 @@ public class HistoryRevision
         implements Serializable {
 
     @Column(name = "CREATOR")
-    private String creator;
+    private Long creator;
 
-    public String getCreator() {
+    public Long getCreator() {
         return creator;
     }
 
-    void setCreator(String creator) {
+    public void setCreator(Long creator) {
         this.creator = creator;
     }
 }
