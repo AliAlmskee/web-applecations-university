@@ -17,7 +17,7 @@ public class FirebaseConfig {
                 new FileInputStream("src/main/resources/keys/serviceAccountKey.json"));
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
-                .setProjectId("")
+                .setProjectId("programminglangs-bf5d1")
                 .build();
         return FirebaseApp.initializeApp(options);
     }
