@@ -112,7 +112,7 @@ public class ComplaintService {
 
     @CacheEvict(value = "complaints", allEntries = true)
     @Transactional
-    public ComplaintFile uploadFile(int complaintId, MultipartFile file) throws Exception {
+    public ComplaintFile uploadFile(Long complaintId, MultipartFile file) throws Exception {
         Complaint complaint = findById(complaintId);
         
         // Create path for complaint files: complaints/{complaintId}/filename
