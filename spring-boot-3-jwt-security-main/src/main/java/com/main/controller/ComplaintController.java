@@ -75,7 +75,7 @@ public class ComplaintController {
 
     @PostMapping("/{id}/files")
     public ResponseEntity<?> uploadFile(
-            @PathVariable int id,
+            @PathVariable Long id,
             @RequestParam("file") MultipartFile file
     ) {
         try {

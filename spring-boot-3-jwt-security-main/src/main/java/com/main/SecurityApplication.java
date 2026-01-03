@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import static com.main.entity.Role.ADMIN;
 import static com.main.entity.Role.MANAGER;
@@ -16,6 +17,7 @@ import static com.main.entity.Role.MANAGER;
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @EnableCaching
+@EnableScheduling
 @EnableJpaRepositories(
 		basePackages = "com.main",
 		repositoryFactoryBeanClass =
