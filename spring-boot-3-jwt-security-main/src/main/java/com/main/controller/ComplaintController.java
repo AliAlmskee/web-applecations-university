@@ -34,13 +34,13 @@ public class ComplaintController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Complaint> findComplaintById(@PathVariable Long id) {
+    public ResponseEntity<Complaint> findComplaintById(@PathVariable int id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateComplaint(
-            @PathVariable Long id,
+            @PathVariable int id,
             @RequestBody ComplaintRequest request
     ) {
         Complaint complaint = service.update(id, request);
@@ -48,13 +48,13 @@ public class ComplaintController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteComplaint(@PathVariable Long id) {
+    public ResponseEntity<?> deleteComplaint(@PathVariable int id) {
         service.delete(id);
         return ResponseEntity.ok("Complaint deleted successfully");
     }
 
     @GetMapping("/complainant/{complainantId}")
-    public ResponseEntity<List<Complaint>> findByComplainantId(@PathVariable Long complainantId) {
+    public ResponseEntity<List<Complaint>> findByComplainantId(@PathVariable Integer complainantId) {
         return ResponseEntity.ok(service.findByComplainantId(complainantId));
     }
 
