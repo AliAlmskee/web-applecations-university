@@ -149,6 +149,12 @@
 				<version>3.8.0</version>
 				<executions>
 					<execution>
+						<id>configuration</id>
+						<goals>
+							<goal>configure</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>jmeter-tests</id>
 						<phase>verify</phase>
 						<goals>
@@ -157,6 +163,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<skipTests>false</skipTests>
 					<testResultsTimestamp>false</testResultsTimestamp>
 					<jmeterVersion>5.6.2</jmeterVersion>
 					<testFilesIncluded>
@@ -166,6 +173,8 @@
 						<server.host>localhost</server.host>
 						<server.port>8080</server.port>
 					</propertiesUser>
+					<resultsDirectory>${project.build.directory}/jmeter/results</resultsDirectory>
+					<generateReports>true</generateReports>
 				</configuration>
 			</plugin>
 		</plugins>

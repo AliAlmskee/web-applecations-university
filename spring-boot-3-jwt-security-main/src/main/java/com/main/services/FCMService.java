@@ -14,7 +14,7 @@ public class FCMService {
     public void sendNotification(String title, String body, Set<String> tokens) {
         logger.info("sending notification to " + tokens);
         try {
-            if (tokens == null) {
+            if (tokens == null || tokens.isEmpty()) {
                 return;
             }
             Notification notification = Notification.builder()
